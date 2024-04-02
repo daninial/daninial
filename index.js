@@ -5,15 +5,15 @@ const port = process.env.PORT || 3000;
 app.use(express.json())
 
 app.get('/', (req, res) => {
-   res.send('Hello World!')
+  res.send('Hello World!')
 })
 
 app.listen(port, () => {
-   console.log(`Example app listening on port ${port}`)
+  console.log(`Example app listening on port ${port}`)
 })
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = "mongodb+srv://b022210130:Ikanbusuk4649@berr2243.cbduncx.mongodb.net/?retryWrites=true&w=majority&appName=berr2243";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -31,10 +31,29 @@ async function run() {
     await client.connect();
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
+
+    // let subjects = await client.db('sample_mflix').collection('fixxed').insertOne(
+    //   {
+    //     language: 'Malay',
+    //     movie: 'Your Name',
+    //     author: "Ali",
+    //   }
+    // )
+    //console.log(subjects)
+
+    let deleted = await client.db('sample_mflix').collection('movies').deleteOne(
+      {
+        _id: new ObjectId('573a1390f29313caabcd4803')
+      }
+
+    )
+    let sub = await client.db('sample_mflix').collection('fixxed').find().toArray()
+    console.log(sub)
+
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    //await client.close();
   }
 }
 run().catch(console.dir);
